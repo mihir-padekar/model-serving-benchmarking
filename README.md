@@ -4,6 +4,13 @@
 
 **Live Demo - https://model-serving-benchmarking.streamlit.app/ **
 ---
+## UI
+<img width="1917" height="867" alt="Screenshot 2026-10-20 162159" src="https://github.com/user-attachments/assets/de812d72-5aac-463c-b855-e7f98d2ce7cb" />
+
+<img width="1917" height="867" alt="Screenshot 2026-10-20 162238" src="https://github.com/user-attachments/assets/e207887f-eb29-439c-a69c-58c3974d5459" />
+
+<img width="1916" height="866" alt="Screenshot 2026-10-20 163053" src="https://github.com/user-attachments/assets/d3210528-e922-4830-b073-4fd7d9850e1e" />
+
 
 ## Architecture
 
