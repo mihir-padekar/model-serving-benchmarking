@@ -2,6 +2,7 @@
 
 **Production-grade ML model serving & optimization lab** — benchmarking DistilBERT inference through ONNX Runtime with FP32/INT8 quantization, async FastAPI serving, Prometheus observability, and a Streamlit dashboard.
 
+**Live Demo - https://model-serving-benchmarking.streamlit.app/ **
 ---
 
 ## Architecture
