@@ -5,9 +5,7 @@ __pycache__
 .gitignore
 
 benchmark
-dashboard
 results
-
 data
 src
 

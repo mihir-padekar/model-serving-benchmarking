@@ -1,0 +1,91 @@
+# ============================================================
+# Model Serving Benchmark — Docker Compose
+# ============================================================
+# Services:
+#   api-fp32     → FastAPI + ONNX Runtime (FP32 model)  :8000
+#   api-int8     → FastAPI + ONNX Runtime (INT8 model)  :8001
+#   dashboard    → Streamlit Optimization Lab            :8501
+#   prometheus   → Metrics collection                    :9090
+# ============================================================
+
+services:
+
+  # --------------------------------------------------------
+  # FP32 Model Server
+  # --------------------------------------------------------
+  api-fp32:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-fp32
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_VARIANT=fp32
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  # --------------------------------------------------------
+  # INT8 Model Server
+  # --------------------------------------------------------
+  api-int8:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-int8
+    ports:
+      - "8001:8000"
+    environment:
+      - MODEL_VARIANT=int8
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  # --------------------------------------------------------
+  # Streamlit Dashboard
+  # --------------------------------------------------------
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    container_name: dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - FP32_API_URL=http://api-fp32:8000
+      - INT8_API_URL=http://api-int8:8000
+    depends_on:
+      api-fp32:
+        condition: service_healthy
+      api-int8:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # --------------------------------------------------------
+  # Prometheus
+  # --------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    depends_on:
+      - api-fp32
+      - api-int8
+    restart: unless-stopped
+
+volumes:
+  prometheus_data:
+

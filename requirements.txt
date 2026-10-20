@@ -4,7 +4,8 @@ onnxruntime
 transformers
 numpy
 pydantic
-streamlit 
-pandas 
-plotly 
+streamlit
+pandas
+plotly
 requests
+prometheus-client
